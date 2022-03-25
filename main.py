@@ -4,7 +4,6 @@ import csv
 
 # Variables
 site_url = 'http://books.toscrape.com/'
-category_url = 'http://books.toscrape.com/catalogue/category/books/childrens_11/index.html'
 
 
 def url_to_soup_object(url):
@@ -14,6 +13,14 @@ def url_to_soup_object(url):
 
 	# Convert page to Object
 	return BeautifulSoup(page_content, 'html.parser')
+
+
+def get_category_li(soup_object):
+	a_list = soup_object.find(class_='nav-list').find('ul').find_all('a')
+	list_title_and_url = []
+	for a in a_list:
+		list_title_and_url.append([a.text.strip(), site_url + a['href']])
+	return list_title_and_url
 
 
 def get_product_page_url(soup_object, url):
@@ -103,38 +110,45 @@ def extract_data(soup_object):
 
 
 # Get page content
-soup = url_to_soup_object(category_url)
-# Get list of product page URL
-product_page_list = get_product_page_url(soup, category_url)
-information_list = []
-for page_url in product_page_list:
-	page_content = url_to_soup_object(page_url)
-	product_information = extract_data(page_content)
-	product_information.insert(0, page_url)
-	information_list.append(product_information)
-###
-# Export data to csv file
-###
+site_soup = url_to_soup_object(site_url)
+# Get category list URL
+category_list = get_category_li(site_soup)
 
-file_header = [
-	'product_page_url',
-	'universal_product_code',
-	'title',
-	'price_including_tax',
-	'price_excluding_tax',
-	'number_available',
-	'product_description',
-	'category',
-	'review_rating',
-	'image_url'
-]
+for category in category_list:
+	category_title = category[0]
+	category_url = category[1]
+	# Get list of product page URL
+	category_page_soup = url_to_soup_object(category_url)
+	product_page_list = get_product_page_url(category_page_soup, category_url)
+	information_list = []
+	for page_url in product_page_list:
+		page_content = url_to_soup_object(page_url)
+		product_information = extract_data(page_content)
+		product_information.insert(0, page_url)
+		information_list.append(product_information)
+	###
+	# Export data to csv file
+	###
 
-file_name = 'category.csv'
-# Open file to write on it
-with open('books/' + file_name, 'w') as file_csv:
-	# Create writer Object
-	writer = csv.writer(file_csv, delimiter=',')
-	# Write header & information
-	writer.writerow(file_header)
-	for information in information_list:
-		writer.writerow(information)
+	file_header = [
+		'product_page_url',
+		'universal_product_code',
+		'title',
+		'price_including_tax',
+		'price_excluding_tax',
+		'number_available',
+		'product_description',
+		'category',
+		'review_rating',
+		'image_url'
+	]
+
+	file_name = category_title + '.csv'
+	# Open file to write on it
+	with open('books/' + file_name, 'w') as file_csv:
+		# Create writer Object
+		writer = csv.writer(file_csv, delimiter=',')
+		# Write header & information
+		writer.writerow(file_header)
+		for information in information_list:
+			writer.writerow(information)
