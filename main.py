@@ -4,7 +4,7 @@ import csv
 
 # Variables
 site_url = 'http://books.toscrape.com/'
-product_page_url = 'http://books.toscrape.com/catalogue/the-wild-robot_288/index.html'
+category_url = 'http://books.toscrape.com/catalogue/category/books/childrens_11/index.html'
 
 
 def url_to_soup_object(url):
@@ -14,6 +14,23 @@ def url_to_soup_object(url):
 
 	# Convert page to Object
 	return BeautifulSoup(page_content, 'html.parser')
+
+
+def get_product_page_url(soup_object):
+	###
+	# Get product page URL from category page
+	###
+
+	# Get parents elements
+	div_list = soup_object.find_all(class_='image_container')
+	books_url = []
+	# Get URL & format it from relative to absolute
+	for div in div_list:
+		product_relative_url = div.find('a')['href']
+		product_url_list = product_relative_url.split('/')[3:]
+		product_url = site_url + 'catalogue/' + '/'.join(product_url_list)
+		books_url.append(product_url)
+	return books_url
 
 
 def extract_data(soup_object):
@@ -75,9 +92,16 @@ def extract_data(soup_object):
 	]
 
 
-soup = url_to_soup_object(product_page_url)
-
-
+# Get page content
+soup = url_to_soup_object(category_url)
+# Get list of product page URL
+product_page_list = get_product_page_url(soup)
+information_list = []
+for page_url in product_page_list:
+	page_content = url_to_soup_object(page_url)
+	product_information = extract_data(page_content)
+	product_information.insert(0, page_url)
+	information_list.append(product_information)
 ###
 # Export data to csv file
 ###
@@ -94,10 +118,13 @@ file_header = [
 	'review_rating',
 	'image_url'
 ]
-file_line = extract_data(soup)
 
 file_name = 'category.csv'
+# Open file to write on it
 with open('books/' + file_name, 'w') as file_csv:
+	# Create writer Object
 	writer = csv.writer(file_csv, delimiter=',')
+	# Write header & information
 	writer.writerow(file_header)
-	writer.writerow(file_line)
+	for information in information_list:
+		writer.writerow(information)
