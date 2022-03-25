@@ -16,7 +16,7 @@ def url_to_soup_object(url):
 	return BeautifulSoup(page_content, 'html.parser')
 
 
-def get_product_page_url(soup_object):
+def get_product_page_url(soup_object, url):
 	###
 	# Get product page URL from category page
 	###
@@ -30,6 +30,16 @@ def get_product_page_url(soup_object):
 		product_url_list = product_relative_url.split('/')[3:]
 		product_url = site_url + 'catalogue/' + '/'.join(product_url_list)
 		books_url.append(product_url)
+	# Check if there is next page
+	try:
+		next_page = soup_object.find(class_='pager').find(class_='next').find('a')['href']
+	except AttributeError:
+		next_page = ''
+	if next_page:
+		# Format URL by adding next_page
+		url_in_list = url.split('/')[:-1]
+		next_page_url = '/'.join(url_in_list) + '/' + next_page
+		books_url += get_product_page_url(url_to_soup_object(next_page_url), next_page_url)
 	return books_url
 
 
@@ -95,7 +105,7 @@ def extract_data(soup_object):
 # Get page content
 soup = url_to_soup_object(category_url)
 # Get list of product page URL
-product_page_list = get_product_page_url(soup)
+product_page_list = get_product_page_url(soup, category_url)
 information_list = []
 for page_url in product_page_list:
 	page_content = url_to_soup_object(page_url)
