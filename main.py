@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import csv
 
 # Variables
 site_url = 'http://books.toscrape.com/'
@@ -57,3 +58,38 @@ image_relative_url = soup.img['src']
 image_url_list = image_relative_url.split('/')[2:]
 # Create absolute URL
 image_url = site_url + '/'.join(image_url_list)
+
+###
+# Export data to csv file
+###
+
+file_header = [
+	'product_page_url',
+	'universal_product_code',
+	'title',
+	'price_including_tax',
+	'price_excluding_tax',
+	'number_available',
+	'product_description',
+	'category',
+	'review_rating',
+	'image_url'
+]
+file_line = [
+	product_page_url,
+	universal_product_code,
+	title,
+	price_including_tax,
+	price_excluding_tax,
+	number_available,
+	product_description,
+	category,
+	review_rating,
+	image_url
+]
+
+file_name = 'category.csv'
+with open('books/' + file_name, 'w') as file_csv:
+	writer = csv.writer(file_csv, delimiter=',')
+	writer.writerow(file_header)
+	writer.writerow(file_line)
