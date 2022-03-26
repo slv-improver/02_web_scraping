@@ -30,3 +30,11 @@ This app scrape data from [an e-commerce (demo) website](http://books.toscrape.c
 
 - beautifulsoup4==4.10.0
 - requests==2.27.1
+
+To install dependencies, run:\
+`python -m venv <environment name>`\
+to create an environment.\
+So, you need to activate it with the following command:\
+`source <environement name>/bin/activate`\
+And the last command to install requirements:\
+`pip install -r requirements.txt`
