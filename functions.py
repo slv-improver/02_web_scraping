@@ -21,9 +21,19 @@ def get_page_content(url):
 
 
 def get_categories(soup_object):
+	""" Get the category titles & URLs
+
+	Parameters:
+		soup_object (string): parsed HTML content as BeautifulSoup Object from get_page_content()
+
+	Returns:
+		list: formatted like [[title, url], [title, url], ...]
+
+	"""
 	a_list = soup_object.find(class_='nav-list').find('ul').find_all('a')
 	list_title_and_url = []
 	for a in a_list:
+		# Text without whitespace & relative category URL formatted
 		list_title_and_url.append([a.text.strip(), SITE_URL + a['href']])
 	return list_title_and_url
 
