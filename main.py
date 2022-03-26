@@ -6,19 +6,19 @@ from datetime import datetime
 print(datetime.now().strftime("%H:%M:%S"))
 
 # Get page content
-site_soup = url_to_soup_object(SITE_URL)
+site_soup = get_page_content(SITE_URL)
 # Get category list URL
-category_list = get_category_li(site_soup)
+category_list = get_categories(site_soup)
 
 for category_item in category_list:
 	category_title = category_item[0]
 	category_url = category_item[1]
 	# Get list of product page URL
-	category_page_soup = url_to_soup_object(category_url)
+	category_page_soup = get_page_content(category_url)
 	product_page_list = get_product_page_url(category_page_soup, category_url)
 	information_list = []
 	for page_url in product_page_list:
-		page_content = url_to_soup_object(page_url)
+		page_content = get_page_content(page_url)
 		product_information = extract_data(page_content, category_title)
 		product_information.insert(0, page_url)
 		information_list.append(product_information)

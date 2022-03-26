@@ -4,16 +4,23 @@ from bs4 import BeautifulSoup
 SITE_URL = 'http://books.toscrape.com/'
 
 
-def url_to_soup_object(url):
+def get_page_content(url):
+	""" Get HTML content
+
+	Parameters:
+		url (string): URL of the web page
+
+	Returns:
+		string: parsed HTML content as BeautifulSoup Object
+
+	"""
 	# Get page content
 	page = requests.get(url)
-	page_content = page.content
-
 	# Convert page to Object
-	return BeautifulSoup(page_content, 'html.parser')
+	return BeautifulSoup(page.content, 'html.parser')
 
 
-def get_category_li(soup_object):
+def get_categories(soup_object):
 	a_list = soup_object.find(class_='nav-list').find('ul').find_all('a')
 	list_title_and_url = []
 	for a in a_list:
