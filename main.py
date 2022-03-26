@@ -2,6 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
+from datetime import datetime
+
+print(datetime.now().strftime("%H:%M:%S"))
+
 # Variables
 site_url = 'http://books.toscrape.com/'
 
@@ -50,7 +54,7 @@ def get_product_page_url(soup_object, url):
 	return books_url
 
 
-def extract_data(soup_object):
+def extract_data(soup_object, book_category):
 	###
 	# Extract all needed information
 	###
@@ -99,7 +103,7 @@ def extract_data(soup_object):
 
 	# Get next td node after element
 	try:
-		category = soup_object.find(text='Product Type').findNext('td').string
+		category = book_category
 	except AttributeError:
 		category = 'No Value'
 
@@ -150,7 +154,7 @@ for category_item in category_list:
 	information_list = []
 	for page_url in product_page_list:
 		page_content = url_to_soup_object(page_url)
-		product_information = extract_data(page_content)
+		product_information = extract_data(page_content, category_title)
 		product_information.insert(0, page_url)
 		information_list.append(product_information)
 	###
@@ -179,3 +183,5 @@ for category_item in category_list:
 		writer.writerow(file_header)
 		for information in information_list:
 			writer.writerow(information)
+
+print(datetime.now().strftime("%H:%M:%S"))
