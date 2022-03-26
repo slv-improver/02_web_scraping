@@ -11,7 +11,7 @@ def get_page_content(url):
 		url (string): URL of the web page
 
 	Returns:
-		string: parsed HTML content as BeautifulSoup Object
+		bs4.BeautifulSoup: parsed HTML content as BeautifulSoup Object
 
 	"""
 	# Get page content
@@ -24,7 +24,7 @@ def get_categories(soup_object):
 	""" Get the category titles & URLs
 
 	Parameters:
-		soup_object (string): parsed HTML content as BeautifulSoup Object from get_page_content()
+		soup_object (bs4.BeautifulSoup): parsed HTML content as BeautifulSoup Object from get_page_content()
 
 	Returns:
 		list: formatted like [[title, url], [title, url], ...]
