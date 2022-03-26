@@ -23,10 +23,10 @@ for category in categories:
 		product_information = extract_data(page_content, category_title)
 		product_information.insert(0, page_url)
 		product_data.append(product_information)
+
 	###
 	# Export data to csv file
 	###
-
 	file_header = [
 		'product_page_url',
 		'universal_product_code',
@@ -48,6 +48,6 @@ for category in categories:
 		# Write header & information
 		writer.writerow(file_header)
 		for data in product_data:
-			writer.writerow(information)
+			writer.writerow(data)
 
 print(datetime.now().strftime("%H:%M:%S"))
