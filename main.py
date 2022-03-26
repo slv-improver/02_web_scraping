@@ -56,46 +56,73 @@ def extract_data(soup_object):
 	###
 
 	# Get next td node after element
-	universal_product_code = soup_object.find(text='UPC').findNext('td').string
+	try:
+		universal_product_code = soup_object.find(text='UPC').findNext('td').string
+	except AttributeError:
+		universal_product_code = 'No Value'
 
 	# Get first h1
-	title = soup_object.h1.string
+	try:
+		title = soup_object.h1.string
+	except AttributeError:
+		title = 'No Value'
 
 	# Get next td node after element
-	price_including_tax = soup_object.find(text='Price (incl. tax)').findNext('td').string
+	try:
+		price_including_tax = soup_object.find(text='Price (incl. tax)').findNext('td').string
+	except AttributeError:
+		price_including_tax = 'No Value'
 
 	# Get next td node after element
-	price_excluding_tax = soup_object.find(text='Price (excl. tax)').findNext('td').string
+	try:
+		price_excluding_tax = soup_object.find(text='Price (excl. tax)').findNext('td').string
+	except AttributeError:
+		price_excluding_tax = 'No Value'
 
 	# Get next td node after element
-	number_available_text = soup_object.find(text='Availability').findNext('td').string
-	# Extract number from text
-	number = ''
-	for letter in number_available_text:
-		if letter.isdigit():
-			number += letter
-	number_available = int(number)
+	try:
+		number_available_text = soup_object.find(text='Availability').findNext('td').string
+		# Extract number from text
+		number = ''
+		for letter in number_available_text:
+			if letter.isdigit():
+				number += letter
+		number_available = int(number)
+	except AttributeError:
+		number_available = 'No Value'
 
 	# Get next p node after element
-	product_description = soup_object.find(id='product_description').findNext('p').string
+	try:
+		product_description = soup_object.find(id='product_description').findNext('p').string
+	except AttributeError:
+		product_description = 'No Value'
 
 	# Get next td node after element
-	category = soup_object.find(text='Product Type').findNext('td').string
+	try:
+		category = soup_object.find(text='Product Type').findNext('td').string
+	except AttributeError:
+		category = 'No Value'
 
 	# Get child who has "star-rating" class within "product_main" class element
-	star_rating = soup_object.find(class_='product_main').find(class_='star-rating')
-	# Get its second class name which is the number of stars
-	number_of_stars = star_rating['class'][1]
-	# Use dictionary to get number
-	equivalent = {'Zero': 0, 'One': 1, 'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5}
-	review_rating = equivalent[number_of_stars]
+	try:
+		star_rating = soup_object.find(class_='product_main').find(class_='star-rating')
+		# Get its second class name which is the number of stars
+		number_of_stars = star_rating['class'][1]
+		# Use dictionary to get number
+		equivalent = {'Zero': 0, 'One': 1, 'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5}
+		review_rating = equivalent[number_of_stars]
+	except AttributeError:
+		review_rating = 'No Value'
 
 	# Get src attribute of first img
-	image_relative_url = soup_object.img['src']
-	# Remove relative elements from path
-	image_url_list = image_relative_url.split('/')[2:]
-	# Create absolute URL
-	image_url = site_url + '/'.join(image_url_list)
+	try:
+		image_relative_url = soup_object.img['src']
+		# Remove relative elements from path
+		image_url_list = image_relative_url.split('/')[2:]
+		# Create absolute URL
+		image_url = site_url + '/'.join(image_url_list)
+	except AttributeError:
+		image_url = 'No Value'
 
 	return [
 		universal_product_code,
@@ -114,9 +141,9 @@ site_soup = url_to_soup_object(site_url)
 # Get category list URL
 category_list = get_category_li(site_soup)
 
-for category in category_list:
-	category_title = category[0]
-	category_url = category[1]
+for category_item in category_list:
+	category_title = category_item[0]
+	category_url = category_item[1]
 	# Get list of product page URL
 	category_page_soup = url_to_soup_object(category_url)
 	product_page_list = get_product_page_url(category_page_soup, category_url)
