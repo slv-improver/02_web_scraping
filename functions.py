@@ -47,7 +47,7 @@ def get_product_page_url(soup, url):
 		url (string): URL of the category page
 
 	Returns:
-		list: books URL
+		list: Books URL
 
 	"""
 	# Get parents elements
@@ -75,38 +75,45 @@ def get_product_page_url(soup, url):
 	return books_url
 
 
-def extract_data(soup_object, book_category):
-	###
-	# Extract all needed information
-	###
+def extract_data(soup, book_category):
+	""" Try to extract all data. If nothing there, assign default value.
 
+	Parameters:
+		soup (bs4.BeautifulSoup): Product page content
+		book_category (string): Category name for assign category
+
+	Returns:
+		list: All needed information
+
+	"""
+	default_value = 'No Value'
 	# Get next td node after element
 	try:
-		universal_product_code = soup_object.find(text='UPC').findNext('td').string
+		universal_product_code = soup.find(text='UPC').findNext('td').string
 	except AttributeError:
-		universal_product_code = 'No Value'
+		universal_product_code = default_value
 
 	# Get first h1
 	try:
-		title = soup_object.h1.string
+		title = soup.h1.string
 	except AttributeError:
-		title = 'No Value'
+		title = default_value
 
 	# Get next td node after element
 	try:
-		price_including_tax = soup_object.find(text='Price (incl. tax)').findNext('td').string
+		price_including_tax = soup.find(text='Price (incl. tax)').findNext('td').string
 	except AttributeError:
-		price_including_tax = 'No Value'
+		price_including_tax = default_value
 
 	# Get next td node after element
 	try:
-		price_excluding_tax = soup_object.find(text='Price (excl. tax)').findNext('td').string
+		price_excluding_tax = soup.find(text='Price (excl. tax)').findNext('td').string
 	except AttributeError:
-		price_excluding_tax = 'No Value'
+		price_excluding_tax = default_value
 
 	# Get next td node after element
 	try:
-		number_available_text = soup_object.find(text='Availability').findNext('td').string
+		number_available_text = soup.find(text='Availability').findNext('td').string
 		# Extract number from text
 		number = ''
 		for letter in number_available_text:
@@ -114,40 +121,40 @@ def extract_data(soup_object, book_category):
 				number += letter
 		number_available = int(number)
 	except AttributeError:
-		number_available = 'No Value'
+		number_available = default_value
 
 	# Get next p node after element
 	try:
-		product_description = soup_object.find(id='product_description').findNext('p').string
+		product_description = soup.find(id='product_description').findNext('p').string
 	except AttributeError:
-		product_description = 'No Value'
+		product_description = default_value
 
 	# Get next td node after element
 	try:
 		category = book_category
 	except AttributeError:
-		category = 'No Value'
+		category = default_value
 
 	# Get child who has "star-rating" class within "product_main" class element
 	try:
-		star_rating = soup_object.find(class_='product_main').find(class_='star-rating')
+		star_rating = soup.find(class_='product_main').find(class_='star-rating')
 		# Get its second class name which is the number of stars
 		number_of_stars = star_rating['class'][1]
 		# Use dictionary to get number
 		equivalent = {'Zero': 0, 'One': 1, 'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5}
 		review_rating = equivalent[number_of_stars]
 	except AttributeError:
-		review_rating = 'No Value'
+		review_rating = default_value
 
 	# Get src attribute of first img
 	try:
-		image_relative_url = soup_object.img['src']
+		image_relative_url = soup.img['src']
 		# Remove relative elements from path
 		image_url_list = image_relative_url.split('/')[2:]
 		# Create absolute URL
 		image_url = SITE_URL + '/'.join(image_url_list)
 	except AttributeError:
-		image_url = 'No Value'
+		image_url = default_value
 
 	# Info
 	print('Product')
