@@ -154,6 +154,8 @@ def extract_data(soup, book_category):
 		img_url_list = img_relative_url.split('/')[2:]
 		# Create absolute URL
 		image_url = SITE_URL + '/'.join(img_url_list)
+
+		download_image(image_url, title)
 	except AttributeError:
 		image_url = default_value
 
