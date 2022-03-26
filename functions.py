@@ -11,7 +11,7 @@ def get_page_content(url):
 		url (string): URL of the web page
 
 	Returns:
-		bs4.BeautifulSoup: parsed HTML content as BeautifulSoup Object
+		bs4.BeautifulSoup: Parsed HTML content as BeautifulSoup Object
 
 	"""
 	# Get page content
@@ -24,10 +24,10 @@ def get_categories(soup):
 	""" Get the category titles & URLs
 
 	Parameters:
-		soup (bs4.BeautifulSoup): parsed HTML content as BeautifulSoup Object from get_page_content()
+		soup (bs4.BeautifulSoup): Parsed HTML content as BeautifulSoup Object from get_page_content()
 
 	Returns:
-		list: formatted like [[title, url], [title, url], ...]
+		list: Formatted like [[title, url], [title, url], ...]
 
 	"""
 	a_list = soup.find(class_='nav-list').find('ul').find_all('a')
@@ -38,13 +38,20 @@ def get_categories(soup):
 	return list_title_and_url
 
 
-def get_product_page_url(soup_object, url):
-	###
-	# Get product page URL from category page
-	###
+def get_product_page_url(soup, url):
+	""" Get the product page URLs of the entire category page.
+	If there is pagination, it gets the next page and so on.
 
+	Parameters:
+		soup (bs4.BeautifulSoup): Category page content
+		url (string): URL of the category page
+
+	Returns:
+		list: books URL
+
+	"""
 	# Get parents elements
-	div_list = soup_object.find_all(class_='image_container')
+	div_list = soup.find_all(class_='image_container')
 	books_url = []
 	# Get URL & format it from relative to absolute
 	for div in div_list:
@@ -54,14 +61,14 @@ def get_product_page_url(soup_object, url):
 		books_url.append(product_url)
 	# Check if there is next page
 	try:
-		next_page = soup_object.find(class_='pager').find(class_='next').find('a')['href']
+		next_page = soup.find(class_='pager').find(class_='next').find('a')['href']
 	except AttributeError:
 		next_page = ''
 	if next_page:
 		# Format URL by adding next_page
 		url_in_list = url.split('/')[:-1]
 		next_page_url = '/'.join(url_in_list) + '/' + next_page
-		books_url += get_product_page_url(url_to_soup_object(next_page_url), next_page_url)
+		books_url += get_product_page_url(get_page_content(next_page_url), next_page_url)
 	# Info
 	print('Category')
 	###
