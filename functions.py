@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import shutil
 
 SITE_URL = 'http://books.toscrape.com/'
 
@@ -169,3 +170,21 @@ def extract_data(soup, book_category):
 		review_rating,
 		image_url
 	]
+
+
+def download_image(url, file_name):
+	""" Download image and save it locally.
+
+	Parameters:
+		url: Image URL
+		file_name: To rename the image
+
+	Returns:
+		None
+
+	"""
+	image_extension = '.' + url.split('.')[-1]
+	image = requests.get(url).content
+
+	with open('images/' + file_name + image_extension, 'wb') as file:
+		file.write(image)
