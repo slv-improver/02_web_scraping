@@ -8,20 +8,21 @@ print(datetime.now().strftime("%H:%M:%S"))
 # Get page content
 site_soup = get_page_content(SITE_URL)
 # Get category list URL
-category_list = get_categories(site_soup)
+categories = get_categories(site_soup)
 
-for category_item in category_list:
-	category_title = category_item[0]
-	category_url = category_item[1]
-	# Get list of product page URL
-	category_page_soup = get_page_content(category_url)
-	product_page_list = get_product_page_url(category_page_soup, category_url)
-	information_list = []
-	for page_url in product_page_list:
+for category in categories:
+	# Assign title and URL
+	category_title = category[0]
+	category_url = category[1]
+	# Get list of product page URL from category page
+	category_page_content = get_page_content(category_url)
+	product_urls = get_product_page_url(category_page_content, category_url)
+	product_data = []
+	for page_url in product_urls:
 		page_content = get_page_content(page_url)
 		product_information = extract_data(page_content, category_title)
 		product_information.insert(0, page_url)
-		information_list.append(product_information)
+		product_data.append(product_information)
 	###
 	# Export data to csv file
 	###
@@ -46,7 +47,7 @@ for category_item in category_list:
 		writer = csv.writer(file_csv, delimiter=',')
 		# Write header & information
 		writer.writerow(file_header)
-		for information in information_list:
+		for data in product_data:
 			writer.writerow(information)
 
 print(datetime.now().strftime("%H:%M:%S"))

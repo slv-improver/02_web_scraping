@@ -148,11 +148,11 @@ def extract_data(soup, book_category):
 
 	# Get src attribute of first img
 	try:
-		image_relative_url = soup.img['src']
+		img_relative_url = soup.img['src']
 		# Remove relative elements from path
-		image_url_list = image_relative_url.split('/')[2:]
+		img_url_list = img_relative_url.split('/')[2:]
 		# Create absolute URL
-		image_url = SITE_URL + '/'.join(image_url_list)
+		image_url = SITE_URL + '/'.join(img_url_list)
 	except AttributeError:
 		image_url = default_value
 
