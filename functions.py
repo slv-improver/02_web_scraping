@@ -195,7 +195,7 @@ def extract_data(soup, book_category):
 		# Create absolute URL
 		image_url = SITE_URL + '/'.join(img_url_list)
 
-		# download_image(image_url, title, category)
+		download_image(image_url, title, category)
 	except AttributeError:
 		image_url = default_value
 
@@ -213,16 +213,25 @@ def extract_data(soup, book_category):
 
 
 def data_to_csv(data_list, title):
+	""" Extract data from list of products & write them into csv.
+
+	Parameters:
+		data_list: List of dict as [{key: 'info', ...}, {key: 'info', ...}, {key: 'info', ...}, {key: 'info', ...}]
+		title: Category_name.csv
+
+	Returns:
+		None
+
+	"""
 	file_name = title + '.csv'
 	# Open file to write on it
 	with open(BOOKS_DIRECTORY + os.sep + file_name, 'w') as file_csv:
 		# Create writer Object
 		writer = csv.writer(file_csv, delimiter=',')
-		# Write data_list keys as header
+		# Write data keys as header
 		header = [*data_list[0]]
 		writer.writerow(header)
-		# Write data_list values as content
-		for d in data_list:
-			line = d.values()
+		# Write data values as content
+		for product in data_list:
+			line = product.values()
 			writer.writerow(line)
-
