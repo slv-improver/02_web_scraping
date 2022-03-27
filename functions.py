@@ -5,8 +5,8 @@ import os
 import random
 
 SITE_URL = 'http://books.toscrape.com/'
-BOOKS_DIRECTORY = '../data/books/'
-IMAGES_DIRECTORY = '../data/images/'
+BOOKS_DIRECTORY = os.path.join('..', 'data', 'books')
+IMAGES_DIRECTORY = os.path.join('..', 'data', 'images')
 
 
 def get_page_content(url):
@@ -94,11 +94,10 @@ def download_image(url, file_name, category):
 	# Get image content in bytes
 	image = requests.get(url).content
 
-	# Replace '/' to write it into a Linux system
-	if '/' in file_name:
-		file_name = file_name.replace('/', ' - ')
-	# Open new file in "write byte" mode
-	destination = IMAGES_DIRECTORY + category + '/'
+	# Replace '/' or '\' to write it into the system
+	if os.sep in file_name:
+		file_name = file_name.replace(os.sep, ' - ')
+	destination = IMAGES_DIRECTORY + os.sep + category + os.sep
 	path = destination + file_name + image_extension
 	# Check if file_name is in th directory & redirect output to /dev/null
 	command = 'ls "' + path + '" &> /dev/null'
@@ -110,8 +109,8 @@ def download_image(url, file_name, category):
 			number += str(random.randint(0, 9))
 		file_name += number
 		path = destination + file_name + image_extension
-	os.makedirs(os.path.dirname(destination), exist_ok=True)
 
+	# Open new file in "write byte" mode
 	with open(path, 'wb') as file:
 		file.write(image)
 
@@ -227,7 +226,7 @@ def data_to_csv(data_list, title):
 
 	file_name = title + '.csv'
 	# Open file to write on it
-	with open(BOOKS_DIRECTORY + file_name, 'w') as file_csv:
+	with open(BOOKS_DIRECTORY + os.sep + file_name, 'w') as file_csv:
 		# Create writer Object
 		writer = csv.writer(file_csv, delimiter=',')
 		# Write header & information
