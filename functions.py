@@ -70,9 +70,6 @@ def get_product_page_url(soup, url):
 		url_in_list = url.split('/')[:-1]
 		next_page_url = '/'.join(url_in_list) + '/' + next_page
 		books_url += get_product_page_url(get_page_content(next_page_url), next_page_url)
-	# Info
-	print('Category')
-	###
 	return books_url
 
 
@@ -183,9 +180,6 @@ def extract_data(soup, book_category):
 	except AttributeError:
 		image_url = default_value
 
-	# Info
-	print('Product')
-	###
 	return [
 		universal_product_code,
 		title, price_including_tax,
