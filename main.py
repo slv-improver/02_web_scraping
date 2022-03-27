@@ -32,8 +32,9 @@ for category in categories:
 	for url in product_urls:
 		page_content = get_page_content(url)
 		# Get single product information
-		product_info = extract_data(page_content, category_title)
-		product_info['product_page_url'] = url
+		# Place product_page_url at first
+		first_info = {'product_page_url': url}
+		product_info = first_info | extract_data(page_content, category_title)
 		# Add product info to list of multiple product information
 		product_data_list.append(product_info)
 		# [{key: 'info', ...}, {key: 'info', ...}, {key: 'info', ...}, {key: 'info', ...}]

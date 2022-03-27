@@ -110,7 +110,6 @@ def download_image(url, file_name, category):
 			number += str(random.randint(0, 9))
 		file_name += number
 		path = destination + file_name + image_extension
-
 	# Open new file in "write byte" mode
 	with open(path, 'wb') as file:
 		file.write(image)
