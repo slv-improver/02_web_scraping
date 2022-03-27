@@ -2,8 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
-import shutil
-
 SITE_URL = 'http://books.toscrape.com/'
 
 
