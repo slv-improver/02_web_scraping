@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 import os
+import random
 
 SITE_URL = 'http://books.toscrape.com/'
 BOOKS_DIRECTORY = '../data/books/'
@@ -103,7 +104,11 @@ def download_image(url, file_name, category):
 	command = 'ls "' + path + '" &> /dev/null'
 	if os.system(command) != 512:
 		# Change file_name
-		file_name += '2'
+		number = ''
+		# Generate 3 random digit to add them to file_name
+		for i in range(3):
+			number += str(random.randint(0, 9))
+		file_name += number
 		path = destination + file_name + image_extension
 	os.makedirs(os.path.dirname(destination), exist_ok=True)
 
