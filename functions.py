@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
+import os
 
 SITE_URL = 'http://books.toscrape.com/'
 BOOKS_DIRECTORY = '../data/books/'
@@ -96,7 +97,9 @@ def download_image(url, file_name, category):
 	if '/' in file_name:
 		file_name = file_name.replace('/', ' - ')
 	# Open new file in "write byte" mode
-	with open(IMAGES_DIRECTORY + category + file_name + image_extension, 'wb') as file:
+	destination = IMAGES_DIRECTORY + category + '/'
+	os.makedirs(os.path.dirname(destination), exist_ok=True)
+	with open(destination + file_name + image_extension, 'wb') as file:
 		file.write(image)
 
 
