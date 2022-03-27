@@ -87,9 +87,15 @@ def download_image(url, file_name):
 		None
 
 	"""
+	# Get file extension
 	image_extension = '.' + url.split('.')[-1]
+	# Get image content in bytes
 	image = requests.get(url).content
 
+	# Replace '/' to write it into a Linux system
+	if '/' in file_name:
+		file_name = file_name.replace('/', ' - ')
+	# Open new file in "write byte" mode
 	with open('images/' + file_name + image_extension, 'wb') as file:
 		file.write(image)
 
