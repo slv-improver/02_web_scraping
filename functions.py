@@ -195,42 +195,34 @@ def extract_data(soup, book_category):
 		# Create absolute URL
 		image_url = SITE_URL + '/'.join(img_url_list)
 
-		download_image(image_url, title, category)
+		# download_image(image_url, title, category)
 	except AttributeError:
 		image_url = default_value
 
-	return [
-		universal_product_code,
-		title, price_including_tax,
-		price_excluding_tax,
-		number_available,
-		product_description,
-		category,
-		review_rating,
-		image_url
-	]
+	return {
+		'universal_product_code': universal_product_code,
+		'title': title,
+		'price_including_tax': price_including_tax,
+		'price_excluding_tax': price_excluding_tax,
+		'number_available': number_available,
+		'product_description': product_description,
+		'category': category,
+		'review_rating': review_rating,
+		'image_url': image_url
+	}
 
 
 def data_to_csv(data_list, title):
-	file_header = [
-		'product_page_url',
-		'universal_product_code',
-		'title',
-		'price_including_tax',
-		'price_excluding_tax',
-		'number_available',
-		'product_description',
-		'category',
-		'review_rating',
-		'image_url'
-	]
-
 	file_name = title + '.csv'
 	# Open file to write on it
 	with open(BOOKS_DIRECTORY + os.sep + file_name, 'w') as file_csv:
 		# Create writer Object
 		writer = csv.writer(file_csv, delimiter=',')
-		# Write header & information
-		writer.writerow(file_header)
-		for data in data_list:
-			writer.writerow(data)
+		# Write data_list keys as header
+		header = [*data_list[0]]
+		writer.writerow(header)
+		# Write data_list values as content
+		for d in data_list:
+			line = d.values()
+			writer.writerow(line)
+

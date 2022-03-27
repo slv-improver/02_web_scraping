@@ -6,7 +6,7 @@ from datetime import datetime
 print(datetime.now().strftime("%H:%M:%S"))
 
 # Remove all data before starting to get only the newer information
-os.system('rm -r ' + DATA_DIRECTORY)
+os.system('rm -rf ' + DATA_DIRECTORY)
 
 # Get page content
 site_soup = get_page_content(SITE_URL)
@@ -33,9 +33,10 @@ for category in categories:
 		page_content = get_page_content(url)
 		# Get single product information
 		product_info = extract_data(page_content, category_title)
-		product_info.insert(0, url)
+		product_info['product_page_url'] = url
 		# Add product info to list of multiple product information
-		product_data_list.append(product_info)  # [['info', info], ['info', info], ['info', info], ['info', info]]
+		product_data_list.append(product_info)
+		# [{key: 'info', ...}, {key: 'info', ...}, {key: 'info', ...}, {key: 'info', ...}]
 
 	###
 	# Export data to csv file
