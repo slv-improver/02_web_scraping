@@ -5,8 +5,9 @@ import os
 import random
 
 SITE_URL = 'http://books.toscrape.com/'
-BOOKS_DIRECTORY = os.path.join('..', 'data', 'books')
-IMAGES_DIRECTORY = os.path.join('..', 'data', 'images')
+DATA_DIRECTORY = os.path.join('..', 'data')
+BOOKS_DIRECTORY = os.path.join(DATA_DIRECTORY, 'books')
+IMAGES_DIRECTORY = os.path.join(DATA_DIRECTORY, 'images')
 
 
 def get_page_content(url):

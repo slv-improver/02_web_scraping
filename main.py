@@ -5,6 +5,9 @@ from datetime import datetime
 
 print(datetime.now().strftime("%H:%M:%S"))
 
+# Remove all data before starting to get only the newer information
+os.system('rm -r ' + DATA_DIRECTORY)
+
 # Get page content
 site_soup = get_page_content(SITE_URL)
 # Get category list URL
