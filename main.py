@@ -1,4 +1,3 @@
-import csv
 from functions import *
 
 from datetime import datetime
@@ -27,27 +26,6 @@ for category in categories:
 	###
 	# Export data to csv file
 	###
-	file_header = [
-		'product_page_url',
-		'universal_product_code',
-		'title',
-		'price_including_tax',
-		'price_excluding_tax',
-		'number_available',
-		'product_description',
-		'category',
-		'review_rating',
-		'image_url'
-	]
-
-	file_name = category_title + '.csv'
-	# Open file to write on it
-	with open('books/' + file_name, 'w') as file_csv:
-		# Create writer Object
-		writer = csv.writer(file_csv, delimiter=',')
-		# Write header & information
-		writer.writerow(file_header)
-		for data in product_data:
-			writer.writerow(data)
+	data_to_csv(product_data, category_title)
 
 print(datetime.now().strftime("%H:%M:%S"))

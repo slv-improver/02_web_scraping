@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+import csv
+
 import shutil
 
 SITE_URL = 'http://books.toscrape.com/'
@@ -190,3 +192,28 @@ def extract_data(soup, book_category):
 		review_rating,
 		image_url
 	]
+
+
+def data_to_csv(data_list, title):
+	file_header = [
+		'product_page_url',
+		'universal_product_code',
+		'title',
+		'price_including_tax',
+		'price_excluding_tax',
+		'number_available',
+		'product_description',
+		'category',
+		'review_rating',
+		'image_url'
+	]
+
+	file_name = title + '.csv'
+	# Open file to write on it
+	with open('books/' + file_name, 'w') as file_csv:
+		# Create writer Object
+		writer = csv.writer(file_csv, delimiter=',')
+		# Write header & information
+		writer.writerow(file_header)
+		for data in data_list:
+			writer.writerow(data)
