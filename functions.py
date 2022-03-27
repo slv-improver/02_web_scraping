@@ -101,7 +101,7 @@ def download_image(url, file_name, category):
 	destination = IMAGES_DIRECTORY + os.sep + category + os.sep
 	path = destination + file_name + image_extension
 	# Check if file_name is in th directory & redirect output to /dev/null
-	command = 'ls "' + path + '" &> /dev/null'
+	command = f'ls "{path}" &> /dev/null'
 	if os.system(command) != 512:
 		# Change file_name
 		number = ''
