@@ -5,7 +5,7 @@ import os
 import random
 
 SITE_URL = 'http://books.toscrape.com/'
-DATA_DIRECTORY = os.path.join('..', 'data')
+DATA_DIRECTORY = os.path.join('.', 'data')
 BOOKS_DIRECTORY = os.path.join(DATA_DIRECTORY, 'books')
 IMAGES_DIRECTORY = os.path.join(DATA_DIRECTORY, 'images')
 

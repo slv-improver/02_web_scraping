@@ -1,5 +1,4 @@
 env/
-books
+data/
 .idea/
-images/
 __pycache__/
