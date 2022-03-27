@@ -98,8 +98,16 @@ def download_image(url, file_name, category):
 		file_name = file_name.replace('/', ' - ')
 	# Open new file in "write byte" mode
 	destination = IMAGES_DIRECTORY + category + '/'
+	path = destination + file_name + image_extension
+	# Check if file_name is in th directory & redirect output to /dev/null
+	command = 'ls "' + path + '" &> /dev/null'
+	if os.system(command) != 512:
+		# Change file_name
+		file_name += '2'
+		path = destination + file_name + image_extension
 	os.makedirs(os.path.dirname(destination), exist_ok=True)
-	with open(destination + file_name + image_extension, 'wb') as file:
+
+	with open(path, 'wb') as file:
 		file.write(image)
 
 
