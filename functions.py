@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import csv
 
 SITE_URL = 'http://books.toscrape.com/'
+BOOKS_DIRECTORY = '../data/books/'
+IMAGES_DIRECTORY = '../data/images/'
 
 
 def get_page_content(url):
@@ -93,7 +95,7 @@ def download_image(url, file_name):
 	if '/' in file_name:
 		file_name = file_name.replace('/', ' - ')
 	# Open new file in "write byte" mode
-	with open('images/' + file_name + image_extension, 'wb') as file:
+	with open(IMAGES_DIRECTORY + file_name + image_extension, 'wb') as file:
 		file.write(image)
 
 
@@ -208,7 +210,7 @@ def data_to_csv(data_list, title):
 
 	file_name = title + '.csv'
 	# Open file to write on it
-	with open('books/' + file_name, 'w') as file_csv:
+	with open(BOOKS_DIRECTORY + file_name, 'w') as file_csv:
 		# Create writer Object
 		writer = csv.writer(file_csv, delimiter=',')
 		# Write header & information
