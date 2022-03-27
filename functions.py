@@ -75,12 +75,13 @@ def get_product_page_url(soup, url):
 	return books_url
 
 
-def download_image(url, file_name):
+def download_image(url, file_name, category):
 	""" Download image and save it locally.
 
 	Parameters:
 		url: Image URL
 		file_name: To rename the image
+		category: Category name to create separate folder
 
 	Returns:
 		None
@@ -95,7 +96,7 @@ def download_image(url, file_name):
 	if '/' in file_name:
 		file_name = file_name.replace('/', ' - ')
 	# Open new file in "write byte" mode
-	with open(IMAGES_DIRECTORY + file_name + image_extension, 'wb') as file:
+	with open(IMAGES_DIRECTORY + category + file_name + image_extension, 'wb') as file:
 		file.write(image)
 
 
@@ -178,7 +179,7 @@ def extract_data(soup, book_category):
 		# Create absolute URL
 		image_url = SITE_URL + '/'.join(img_url_list)
 
-		download_image(image_url, title)
+		download_image(image_url, title, category)
 	except AttributeError:
 		image_url = default_value
 
