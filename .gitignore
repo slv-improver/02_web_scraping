@@ -2,4 +2,4 @@ env/
 books
 .idea/
 images/
-__pycache__
+__pycache__/
