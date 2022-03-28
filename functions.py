@@ -98,6 +98,9 @@ def download_image(url, file_name, category):
 	# Replace '/' or '\' to write it into the system
 	if os.sep in file_name:
 		file_name = file_name.replace(os.sep, ' - ')
+	# Replace double quotes because of error at "ls" command
+	if '"' in file_name:
+		file_name = file_name.replace('"', '\'\'')
 	destination = IMAGES_DIRECTORY + os.sep + category + os.sep
 	path = destination + file_name + image_extension
 	# Check if file_name is in th directory & redirect output to /dev/null
